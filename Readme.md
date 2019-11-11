@@ -1,12 +1,17 @@
+## Description
 
+This plugin is intended to work as expected by [Nagios Guidlines](http://nagios-plugins.org/doc/guidelines.html)
 
 ## Requirements
-
+```
 yum install python3
 
-python libs: results
+pip3 install -r requirements.txt
+```
 
-## Setup
+## Usage
 
-
-# Usage
+Example: 
+```
+./otsd-nagios.py http://otsdev.int4mind.com/ ; echo $?
+```

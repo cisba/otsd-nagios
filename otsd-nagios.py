@@ -26,7 +26,7 @@ except:
     sys.exit(3)
 
 # dump for debug
-print(json.dumps(r.json(), indent=2))
+#print(json.dumps(r.json(), indent=2))
 
 # evaluate balance
 DUST = 0.001 # This value is too high, and has to be changed server side!
