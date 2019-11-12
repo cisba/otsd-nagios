@@ -3,6 +3,7 @@
 import requests
 import json
 import sys
+import statistics
 
 # get status from calendar server
 url = sys.argv[1]
@@ -36,23 +37,25 @@ except:
     print("UNKNOWN: error parsing json response (%s)" % r.text)
     sys.exit(3)
 
-# dump for debug
-#print(json.dumps(r.json(), indent=2))
+#dump for debug
+#print(json.dumps(status, indent=2))
 
 # evaluate balance
+mean = abs(statistics.mean([t["fee"] for t in status["transactions"]]))
 # https://github.com/bitcoin/bitcoin/blob/master/src/policy/policy.cpp
 DUST = 0.00000546
-CRITICAL_BALANCE = DUST
-WARNING_BALANCE = 100 * DUST
+c_balance = DUST
+w_balance = 100 * mean
 
 balance = float(status["balance"])
-if balance < CRITICAL_BALANCE:
-    print("CRITICAL | Balance=%fBTC" % balance)
+if balance < c_balance:
+    print("CRITICAL: balance lower then %.8f| Balance=%.8fBTC" % (c_balance, balance))
     sys.exit(2)
-elif balance < WARNING_BALANCE:
-    print("WARNING | Balance=%fBTC" % balance)
+elif balance < w_balance:
+    print("WARNING: balance lower then %.8f| Balance=%.8fBTC" % (w_balance, balance))
     sys.exit(1)
 
-print("OK | Balance=%fBTC" % balance)
+print("OK: | Balance=%fBTC" % balance)
+sys.exit(0)
 
 
